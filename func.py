@@ -61,3 +61,14 @@ def _decay(x_val, x_pos, theta_vec_cum, windlen):
     theta_vec_cum_lag = list(pd.Series(theta_vec_cum.copy()).shift(periods=x_pos-1, fill_value=0))
     x_prod = x_vec * theta_vec_cum_lag
     return x_prod
+
+
+def transform_json(df):
+    values=df['ExportedModel']['hyper_values']
+    transformed_dict = ""
+    for key, value in values.items():
+        original_value = value[0]
+        lower_value = round(original_value * 0.8, 4)
+        higher_value = round(original_value * 1.2, 4)
+        transformed_dict += key + " = c(" + str(lower_value) + "," + str(higher_value) + "),\n"
+    return transformed_dict
