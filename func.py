@@ -72,3 +72,40 @@ def transform_json(df):
         higher_value = round(original_value * 1.2, 4)
         transformed_dict += key + " = c(" + str(lower_value) + "," + str(higher_value) + "),\n"
     return transformed_dict
+
+
+
+def display_dict(data):
+    result = ""
+    for key, value in data.items():
+        for sub_key, sub_value in value.items():
+            original_value = sub_value
+            lower_value = round(original_value * 0.8, 4)
+            higher_value = round(original_value * 1.2, 4)
+            result += f"{key}_{sub_key} = c{lower_value,higher_value},\n"
+    return result
+
+
+def generate_robyn_inputs(date, output, media, organic, start_date, end_date):
+    if "revenue" in output:
+        output_type='revenue'
+    else:
+        output_type='conversions'
+    script = "InputCollect <- robyn_inputs(\n"
+    script += f"  dt_input = data.table::fread('./dataset.csv')\n"
+    script += "  ,dt_holidays = dt_prophet_holidays\n"
+    script += f"  ,date_var = '{date}'\n"
+    script += f"  ,dep_var = '{output}'\n"
+    script += f"  ,dep_var_type = '{output_type}'\n"
+    script += "  ,prophet_vars = c('season', 'holiday')\n"
+    script += "  ,prophet_country = 'US'\n"
+    script += f"  ,paid_media_vars = c({', '.join(media)})\n"
+    script += f"  ,paid_media_spends = c({', '.join(media)})\n"
+    script += f"  ,organic_vars = c({', '.join(organic)})\n"
+    script += "  ,context_vars = c('apertura_monomarca')\n"
+    script += "  ,context_sign = c('positive')\n"
+    script += f"  ,window_start = '{start_date}'\n"
+    script += f"  ,window_end = '{end_date}'\n"
+    script += "  ,adstock = 'weibull_pdf'\n"
+    script += ")"
+    return script
