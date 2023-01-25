@@ -12,9 +12,5 @@ media=st.session_state["media"]
 organic=st.session_state["organic"]
 variance=st.session_state['variance']
 
-init=generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations)
-
-p=display_dict(column_values, variance)
-
+init=generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations,column_values, variance )
 st.code(init)
-st.code(p)

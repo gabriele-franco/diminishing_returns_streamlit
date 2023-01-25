@@ -86,11 +86,12 @@ def display_dict(data,variance):
     return result
 
 
-def generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations):
+def generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations,data, variance):
     if "revenue" in output:
         output_type='revenue'
     else:
         output_type='conversions'
+    hyper=display_dict(data,variance)
     script = "InputCollect <- robyn_inputs(\n"
     script += f"  dt_input = data.table::fread('./dataset.csv')\n"
     script += "  ,dt_holidays = dt_prophet_holidays\n"
@@ -109,9 +110,11 @@ def generate_robyn_inputs(date, output, media, organic, start_date, end_date, it
     script += "  ,adstock = 'weibull_pdf'\n"
     script += ")\n"
     script += "   ##############\n"
+    script += f"{hyper}\n"
+    script += "   ##############\n"
     script += "InputCollect <- robyn_inputs(InputCollect = InputCollect, hyperparameters = hyperparameters)\n"
     script += "saveRDS(InputCollect, 'input.rds')\n"
     script += "   ##############\n"
-    script += f"OutputModels <- robyn_run(InputCollect = InputCollect,cores = 32,iterations = {iterations},trials = 10,)"
+    script += f"OutputModels <- robyn_run(InputCollect = InputCollect,cores = 32,iterations = {iterations},trials = 10)\n"
     script += "saveRDS(OutputModels, 'output.rds')"
     return script
