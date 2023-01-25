@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 st.set_page_config(
-    page_title="Multipage App",
+    page_title="Cassandra MMM App",
     page_icon="👋",
 )
 
@@ -23,9 +23,12 @@ data = st.file_uploader("Choose a CSV file", type=["csv"])
 if data is not None:
     data = pd.read_csv(data)
     st.dataframe(data)
+    media_auto = [col for col in data.columns if 'spend' in col]
+    #output_auto= [col for col in data.columns if 'revenue' in col]
+    #date_auto=[col for col in data.columns if 'date' in col]
     output=st.sidebar.selectbox("Select the output variable", data.columns)
     date=st.sidebar.selectbox("Select the data variable", data.columns)
-    media = st.sidebar.multiselect("Select Media Variable", data.columns)   
+    media = st.sidebar.multiselect("Select Media Variable", data.columns, media_auto)   
     organic = st.sidebar.multiselect("Select organic Variable", data.columns) 
     submit = st.button("Submit")
     if submit:
