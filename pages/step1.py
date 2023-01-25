@@ -23,14 +23,20 @@ start_date = st.date_input(label='Start Date', value=data[date].min())
 end_date = st.date_input(label='End Date', value=data[date].max())
 iterations = st.text_input("Enter iterations")
 column_values = {}
+variance={}
 # Display the selected columns
 if media:
     for i, col in enumerate(media):
         gamma = st.sidebar.slider(label=f'{col}_gamma', min_value=0.1, max_value=1.1, step=0.1)
+        var_gamma=st.sidebar.number_input(label=f'{col}_gamma variance', min_value=0, max_value=100, value=20)
         alpha = st.sidebar.slider(label=f'{col}_alpha', min_value=0.1, max_value=3.1, step=0.1)
+        var_alpha=st.sidebar.number_input(label=f'{col}_alpha variance', min_value=0, max_value=100, value=20)
         shape = st.sidebar.slider(label=f'{col}_shape', min_value=0.1, max_value=10.1, step=0.1)
+        var_shape=st.sidebar.number_input(label=f'{col}_shape variance', min_value=0, max_value=100, value=20)
         scale = st.sidebar.slider(label=f'{col}_scale', min_value=0.0001, max_value=0.5, step=0.0001)
+        var_scale=st.sidebar.number_input(label=f'{col}_scale variance', min_value=0, max_value=100, value=20)
         column_values[col] = {'gamma': gamma, 'alpha': alpha, 'shape': shape, 'scale': scale}
+        variance[col]={'gamma':var_gamma, 'alpha':var_alpha, 'shape':var_shape, 'scale':var_scale}
 
 
 # Create a new section in the sidebar
@@ -62,6 +68,7 @@ if submit:
     st.session_state['start_date']=start_date
     st.session_state['end_date']=end_date
     st.session_state['iterations']=iterations
+    st.session_state['variance']=variance
 
 
 

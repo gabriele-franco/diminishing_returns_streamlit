@@ -10,21 +10,11 @@ output=st.session_state["output"]
 date=st.session_state["date"]
 media=st.session_state["media"]
 organic=st.session_state["organic"]
+variance=st.session_state['variance']
 
+init=generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations)
 
-def display_dict(data):
-    result = ""
-    for key, value in data.items():
-        for sub_key, sub_value in value.items():
-            original_value = sub_value
-            lower_value = round(original_value * 0.8, 4)
-            higher_value = round(original_value * 1.2, 4)
-            result += f"{key}_{sub_key} = c{lower_value,higher_value},\n"
-    return result
-
-init=generate_robyn_inputs(date, output, media, organic, start_date, end_date)
-
-p=display_dict(column_values)
+p=display_dict(column_values, variance)
 
 st.code(init)
 st.code(p)

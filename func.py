@@ -75,18 +75,18 @@ def transform_json(df):
 
 
 
-def display_dict(data):
+def display_dict(data,variance):
     result = ""
     for key, value in data.items():
         for sub_key, sub_value in value.items():
             original_value = sub_value
-            lower_value = round(original_value * 0.8, 4)
-            higher_value = round(original_value * 1.2, 4)
+            lower_value = round(original_value * (1-(variance[key][sub_key]/100)), 4)
+            higher_value = round(original_value * (1+(variance[key][sub_key]/100)), 4)
             result += f"{key}_{sub_key} = c{lower_value,higher_value},\n"
     return result
 
 
-def generate_robyn_inputs(date, output, media, organic, start_date, end_date):
+def generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations):
     if "revenue" in output:
         output_type='revenue'
     else:
@@ -107,5 +107,11 @@ def generate_robyn_inputs(date, output, media, organic, start_date, end_date):
     script += f"  ,window_start = '{start_date}'\n"
     script += f"  ,window_end = '{end_date}'\n"
     script += "  ,adstock = 'weibull_pdf'\n"
-    script += ")"
+    script += ")\n"
+    script += "   ##############\n"
+    script += "InputCollect <- robyn_inputs(InputCollect = InputCollect, hyperparameters = hyperparameters)\n"
+    script += "saveRDS(InputCollect, 'input.rds')\n"
+    script += "   ##############\n"
+    script += f"OutputModels <- robyn_run(InputCollect = InputCollect,cores = 32,iterations = {iterations},trials = 10,)"
+    script += "saveRDS(OutputModels, 'output.rds')"
     return script
