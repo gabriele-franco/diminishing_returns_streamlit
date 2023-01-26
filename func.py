@@ -13,6 +13,7 @@ def create_number_list(dataframe, column_name):
 
 
 
+
 def saturation_robyn(x, coeff, alpha, gamma):
     return coeff * (x ** alpha / (x ** alpha + gamma ** alpha))
 
@@ -61,6 +62,29 @@ def _decay(x_val, x_pos, theta_vec_cum, windlen):
     theta_vec_cum_lag = list(pd.Series(theta_vec_cum.copy()).shift(periods=x_pos-1, fill_value=0))
     x_prod = x_vec * theta_vec_cum_lag
     return x_prod
+
+def adstock_transf(x, shape, scale, windlen=None, type="pdf"):
+        if windlen is None:
+            windlen = len(x)
+        if len(x) > 1:
+            if type.lower() not in ("cdf", "pdf"):
+                raise ValueError("Invalid value for `type`")
+            x_bin = np.arange(1, windlen + 1)
+            scale_trans = round(np.quantile(x_bin, scale), 0)
+            if shape == 0:
+                theta_vec_cum = theta_vec = np.zeros(windlen)
+            else:
+                #if type.lower() == "cdf":
+                    #theta_vec = np.concatenate([[1], 1 - stats.weibull_min.cdf(x_bin[:-1], shape=shape, scale=scale_trans)])
+                    #theta_vec_cum = np.cumprod(theta_vec)
+                if type.lower() == "pdf":
+                    theta_vec_cum = _normalize(weibull_min.pdf(x_bin, c=shape, scale=scale_trans))
+            x_decayed = [_decay(x_val, x_pos, theta_vec_cum, windlen) for x_val, x_pos in zip(x, x_bin[:len(x)])]
+            x_decayed = np.sum(x_decayed, axis=0)
+        else:
+            x_decayed = x
+            theta_vec_cum = 1
+        return {"x": x, "x_decayed": x_decayed, "theta_vec_cum": theta_vec_cum}
 
 
 def transform_json(df):
@@ -118,3 +142,14 @@ def generate_robyn_inputs(date, output, media, organic, start_date, end_date, it
     script += f"OutputModels <- robyn_run(InputCollect = InputCollect,cores = 32,iterations = {iterations},trials = 10)\n"
     script += "saveRDS(OutputModels, 'output.rds')"
     return script
+
+
+
+def get_average_last_15_days(df, features):
+    result = {}
+    for feature in features:
+        last_15_days = df[feature]
+        last_15_days_non_zero = last_15_days[last_15_days != 0]
+        average = last_15_days_non_zero.mean()
+        result[feature] = average
+    return result

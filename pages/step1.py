@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from func import create_number_list, saturation_hill, adstock
+from func import create_number_list, saturation_hill, adstock,get_average_last_15_days
 import matplotlib.pyplot as plt
 
 
@@ -38,6 +38,9 @@ if media:
         column_values[col] = {'gamma': gamma, 'alpha': alpha, 'shape': shape, 'scale': scale}
         variance[col]={'gamma':var_gamma, 'alpha':var_alpha, 'shape':var_shape, 'scale':var_scale}
 
+coef=st.number_input(label='coefficient', value=50)
+
+spent=get_average_last_15_days(data, media)
 
 # Create a new section in the sidebar
 ad=st.selectbox("Select the media", media)
@@ -47,7 +50,10 @@ df['dim'] = saturation_hill(df['spent'], column_values[ad]['alpha'], column_valu
 # Create a subplot with 2 columns and 1 row
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10,5))
 # Plot the first graph on the first column
-ax1.plot(df['spent'], df['dim'])
+ax1.plot(df['spent'], df['dim']*coef)
+# Add a vertical line at x-coordinate 15
+ax1.axvline(x=spent[ad], color='red', linestyle='--', linewidth=2)
+
 ax1.set_xlabel("Original values")
 ax1.set_ylabel("Transformed values")
 ax1.set_title("Saturation Hill")
@@ -61,6 +67,8 @@ ax2.set_ylabel("Theta vec cum")
 ax2.set_title("Adstock")
 # Show the subplot
 st.pyplot(fig)
+
+
 
 submit = st.button("Submit")
 if submit:
