@@ -27,13 +27,13 @@ variance={}
 # Display the selected columns
 if media:
     for i, col in enumerate(media):
-        gamma = st.sidebar.slider(label=f'{col}_gamma', min_value=0.1, max_value=1.1, step=0.1)
+        gamma = st.sidebar.slider(label=f'{col}_gamma', min_value=0.1, max_value=1.1,value=0.3, step=0.1)
         var_gamma=st.sidebar.number_input(label=f'{col}_gamma variance', min_value=0, max_value=100, value=20)
-        alpha = st.sidebar.slider(label=f'{col}_alpha', min_value=0.1, max_value=3.1, step=0.1)
+        alpha = st.sidebar.slider(label=f'{col}_alpha', min_value=0.1, max_value=3.1,value=1.7, step=0.1)
         var_alpha=st.sidebar.number_input(label=f'{col}_alpha variance', min_value=0, max_value=100, value=20)
-        shape = st.sidebar.slider(label=f'{col}_shape', min_value=0.1, max_value=10.1, step=0.1)
+        shape = st.sidebar.slider(label=f'{col}_shape', min_value=0.1, max_value=10.1,value=1.01, step=0.01)
         var_shape=st.sidebar.number_input(label=f'{col}_shape variance', min_value=0, max_value=100, value=20)
-        scale = st.sidebar.slider(label=f'{col}_scale', min_value=0.0001, max_value=0.5, step=0.0001)
+        scale = st.sidebar.slider(label=f'{col}_scale', min_value=0.0001, max_value=0.5,value=0.2, step=0.0001)
         var_scale=st.sidebar.number_input(label=f'{col}_scale variance', min_value=0, max_value=100, value=20)
         column_values[col] = {'gamma': gamma, 'alpha': alpha, 'shape': shape, 'scale': scale}
         variance[col]={'gamma':var_gamma, 'alpha':var_alpha, 'shape':var_shape, 'scale':var_scale}
