@@ -15,20 +15,27 @@ organic=st.session_state["organic"]
 if "column_values" not in st.session_state:
     st.session_state['column_values']=0.1
 
-
+optimal_values=False
 #st.dataframe(data)
 st.title("Select Date Range")
 data[date]=pd.to_datetime(data[date])
 lagged={}
+correlations={}
+
 if st.button('Find Optimal Values'):
+    optimal_values=True
     for i in media:
         optimal_params, corr = measure_delayed_effect(data, output, i)
         optimal_dim,corr_dim=measure_dim_effect(data, output, i)
-        lagged[i]={'shape':optimal_params[0],'scale':optimal_params[1], 'correlation':abs(corr),
-        'alpha':optimal_dim[0], 'gamma': optimal_dim[1],'corr_dim':abs(corr_dim),}
+        lagged[i]={'shape':optimal_params[0],'scale':optimal_params[1],
+        'alpha':optimal_dim[0], 'gamma': optimal_dim[1]}
+        correlations[i]={'correlation_adstock':abs(corr),'correlation_dim':abs(corr_dim)}
+
+        
 else:
     for i in media:
         lagged[i]={'shape':0.1,'scale':0.1,'alpha':0.3, 'gamma': 1.01}
+        column_values={}
 
 
 
@@ -41,15 +48,15 @@ variance={}
 if media:
     for i, col in enumerate(media):
         gamma = st.sidebar.slider(label=f'{col}_gamma', min_value=0.1, max_value=1.1,value=float(lagged[col]['gamma']), step=0.1)
-        var_gamma=st.sidebar.number_input(label=f'{col}_gamma variance', min_value=0, max_value=100, value=20)
+        var_gamma=st.sidebar.number_input(label=f'{col}_gamma variance', min_value=0, max_value=100, value=70)
         alpha = st.sidebar.slider(label=f'{col}_alpha', min_value=0.1, max_value=3.1,value=float(lagged[col]['alpha']), step=0.1)
-        var_alpha=st.sidebar.number_input(label=f'{col}_alpha variance', min_value=0, max_value=100, value=20)
+        var_alpha=st.sidebar.number_input(label=f'{col}_alpha variance', min_value=0, max_value=100, value=70)
         shape = st.sidebar.slider(label=f'{col}_shape', min_value=0.1, max_value=10.1,value=float(lagged[col]['shape']), step=0.01)
-        var_shape=st.sidebar.number_input(label=f'{col}_shape variance', min_value=0, max_value=100, value=20)
+        var_shape=st.sidebar.number_input(label=f'{col}_shape variance', min_value=0, max_value=100, value=70)
         scale = st.sidebar.slider(label=f'{col}_scale', min_value=0.0001, max_value=0.5,value=float(lagged[col]['scale']), step=0.0001)
         var_scale=st.sidebar.number_input(label=f'{col}_scale variance', min_value=0, max_value=100, value=70)
-        column_values[col] = {'gamma': gamma, 'alpha': alpha, 'shape': shape, 'scale': scale}
         variance[col]={'gamma':var_gamma, 'alpha':var_alpha, 'shape':var_shape, 'scale':var_scale}
+        column_values[col] = {'gamma': gamma, 'alpha': alpha, 'shape': shape, 'scale': scale}
 
 coef=st.number_input(label='coefficient', value=50)
 
@@ -81,15 +88,19 @@ ax2.set_title("Adstock")
 # Show the subplot
 st.pyplot(fig)
 
+if optimal_values==True:
+    column_values=lagged
+else:
+    column_values=column_values.copy()
 
 
-submit = st.button("Submit")
-if submit:
-    st.session_state['column_values']=column_values
-    st.session_state['start_date']=start_date
-    st.session_state['end_date']=end_date
-    st.session_state['iterations']=iterations
-    st.session_state['variance']=variance
+
+st.session_state['column_values']=column_values
+st.session_state['start_date']=start_date
+st.session_state['end_date']=end_date
+st.session_state['iterations']=iterations
+st.session_state['variance']=variance
+
 
 
 

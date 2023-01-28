@@ -29,7 +29,7 @@ if data is not None:
     output=st.sidebar.selectbox("Select the output variable", data.columns, 1)
     date=st.sidebar.selectbox("Select the data variable", data.columns,0)
     media = st.sidebar.multiselect("Select Media Variable", data.columns, media_auto)   
-    organic = st.sidebar.multiselect("Select organic Variable", data.columns) 
+    organic = st.sidebar.multiselect("Select organic Variable", data.columns)
     submit = st.button("Submit")
     if submit:
         st.session_state["data"] = data
