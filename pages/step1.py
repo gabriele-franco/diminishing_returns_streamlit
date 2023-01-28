@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-from func import create_number_list, saturation_hill, adstock,get_average_last_15_days,measure_delayed_effect,measure_dim_effect
+from func import create_number_list, saturation_hill, adstock,get_average_last_15_days,
+from func import measure_delayed_effect,measure_dim_effect
 import matplotlib.pyplot as plt
 
 
@@ -46,7 +47,7 @@ if media:
         shape = st.sidebar.slider(label=f'{col}_shape', min_value=0.1, max_value=10.1,value=float(lagged[col]['shape']), step=0.01)
         var_shape=st.sidebar.number_input(label=f'{col}_shape variance', min_value=0, max_value=100, value=20)
         scale = st.sidebar.slider(label=f'{col}_scale', min_value=0.0001, max_value=0.5,value=float(lagged[col]['scale']), step=0.0001)
-        var_scale=st.sidebar.number_input(label=f'{col}_scale variance', min_value=0, max_value=100, value=20)
+        var_scale=st.sidebar.number_input(label=f'{col}_scale variance', min_value=0, max_value=100, value=70)
         column_values[col] = {'gamma': gamma, 'alpha': alpha, 'shape': shape, 'scale': scale}
         variance[col]={'gamma':var_gamma, 'alpha':var_alpha, 'shape':var_shape, 'scale':var_scale}
 
