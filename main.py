@@ -26,8 +26,8 @@ if data is not None:
     media_auto = [col for col in data.columns if 'spend' in col]
     #output_auto= [col for col in data.columns if 'revenue' in col]
     #date_auto=[col for col in data.columns if 'date' in col]
-    output=st.sidebar.selectbox("Select the output variable", data.columns)
-    date=st.sidebar.selectbox("Select the data variable", data.columns)
+    output=st.sidebar.selectbox("Select the output variable", data.columns, 1)
+    date=st.sidebar.selectbox("Select the data variable", data.columns,0)
     media = st.sidebar.multiselect("Select Media Variable", data.columns, media_auto)   
     organic = st.sidebar.multiselect("Select organic Variable", data.columns) 
     submit = st.button("Submit")

@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from scipy.stats import weibull_min
+from scipy.optimize import minimize
+
 
 def create_number_list(dataframe, column_name):
     min_val = dataframe[column_name].min()
@@ -153,3 +155,83 @@ def get_average_last_15_days(df, features):
         average = last_15_days_non_zero.mean()
         result[feature] = average
     return result
+"""
+def ridge_regression_positive_coef(data,output, features_positive,media, test_size=0.2):
+    # Split data into training and test sets
+    X = data[features_positive]
+    y = data[output]
+     # Adstock transformation
+    for feature in media:
+        X[feature] = adstock_transf(X[feature], shape=column_values[feature]['shape'], scale=column_values[feature]['scale'])['x_decayed']
+        X[feature] = saturation_hill(X[feature], alpha=column_values[feature]['alpha'], gamma=column_values[feature]['gamma'])
+        
+    # Create Ridge regression model
+    model = Lasso(alpha=1.0, fit_intercept=True)
+    
+    # Force specific features to have positive coefficients
+    for i, feature in enumerate(X.columns):
+        if feature in features_positive:
+            model.set_params(alpha=0, positive=True)
+    model.fit(X, y)
+    # Get R^2 and NRMSE of the model on the test set
+    y_pred = model.predict(X)
+    data['y_pred']=y_pred
+    r2 = r2_score(y, y_pred)
+    nrmse = np.sqrt(mean_squared_error(y, y_pred)) / (y.max() - y.min())
+    
+    return model, r2, nrmse, data"""
+
+
+def measure_delayed_effect(df, output, column_b):
+    delayed_effect_days_range = range(0, 30)
+    max_corr = 0
+    optimal_delayed_effect_days = None
+    for delayed_days in delayed_effect_days_range:
+        data = df[[output, column_b]]
+        data['delayed_input'] = data[column_b].shift(delayed_days)
+        data=data.dropna()
+        corr = data[[output, 'delayed_input']].corr().iloc[0,1]
+        if corr > max_corr:
+            max_corr = corr
+            optimal_delayed_effect_days = delayed_days
+
+    return optimal_delayed_effect_days, max_corr
+
+
+def correlation(df, x, output,params):
+    data={}
+    data[x]=df[x]
+    data[output]=df[output]
+    shape, scale = params
+    x_decayed = adstock_transf(data[x], shape, scale, type="pdf")["x_decayed"]
+    data['adstock']=x_decayed
+    corr = data[[output, 'adstock']].corr().iloc[0,1]
+    return -corr
+
+def measure_delayed_effect(df, output, column_b):
+    def adstock_correlation(params, df, output, column_b):
+        shape, scale = params
+        x_decayed = adstock_transf(df[column_b], shape, scale)["x_decayed"]
+        corr = np.corrcoef( df[output],x_decayed)[0,1]
+        return -corr
+
+    bnds = [(0.1, 10), (0.01, 0.5)]
+    x0 = [1, 0.1]
+    res = minimize(adstock_correlation, x0=x0, bounds=bnds, args=(df, output, column_b), method='L-BFGS-B')
+    optimal_params = res.x
+    corr=adstock_correlation(optimal_params, df, output, column_b)
+    return optimal_params,corr
+
+def measure_dim_effect(df, output, column_b):
+    def dim_correlation(params, df, output, column_b):
+        alpha, gamma = params
+        diminished =saturation_hill(df[column_b], alpha, gamma)
+        corr = np.corrcoef( df[output],diminished)[0,1]
+        return -corr
+
+    bnds = [(0.1, 3.1), (0.1, 1.1)]
+    x0 = [1, 0.1]
+    res = minimize(dim_correlation, x0=x0, bounds=bnds, args=(df, output, column_b), method='L-BFGS-B')
+    optimal_params = res.x
+    corr=dim_correlation(optimal_params, df, output, column_b)
+    return optimal_params,corr
