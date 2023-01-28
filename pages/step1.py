@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from func import create_number_list, saturation_hill, adstock,get_average_last_15_days,
+from func import create_number_list, saturation_hill, adstock,get_average_last_15_days
 from func import measure_delayed_effect,measure_dim_effect
 import matplotlib.pyplot as plt
 
