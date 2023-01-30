@@ -209,13 +209,13 @@ def correlation(df, x, output,params):
 def measure_delayed_effect(df, output, column_b):
     def adstock_correlation(params, df, output, column_b):
         shape, scale = params
-        x_decayed = adstock_transf(df[column_b], shape, scale)["x_decayed"]
+        x_decayed = adstock_transf(x=df[column_b], shape=shape,scale= scale)["x_decayed"]
         corr = np.corrcoef( df[output],x_decayed)[0,1]
         return -corr
 
     bnds = [(0.1, 10), (0.01, 0.5)]
     x0 = [1, 0.1]
-    res = minimize(adstock_correlation, x0=x0, bounds=bnds, args=(df, output, column_b), method='L-BFGS-B')
+    res = minimize(adstock_correlation, x0=x0, bounds=bnds, args=(df, output, column_b), method='Nelder-Mead')
     optimal_params = res.x
     corr=adstock_correlation(optimal_params, df, output, column_b)
     return optimal_params,corr
@@ -223,7 +223,7 @@ def measure_delayed_effect(df, output, column_b):
 def measure_dim_effect(df, output, column_b):
     def dim_correlation(params, df, output, column_b):
         alpha, gamma = params
-        diminished =saturation_hill(df[column_b], alpha, gamma)
+        diminished = saturation_hill(x=df[column_b], alpha=alpha, gamma=gamma)
         corr = np.corrcoef( df[output],diminished)[0,1]
         return -corr
 

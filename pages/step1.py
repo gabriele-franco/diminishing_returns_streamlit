@@ -5,7 +5,8 @@ from func import measure_delayed_effect,measure_dim_effect
 import matplotlib.pyplot as plt
 
 
-st.title("Projects")
+
+#Save all the variable in the session_state
 data=st.session_state["data"]
 output=st.session_state["output"]
 date=st.session_state["date"]
@@ -22,21 +23,27 @@ data[date]=pd.to_datetime(data[date])
 lagged={}
 correlations={}
 
+for i in media:
+    lagged[i]={'shape':0.1,'scale':0.1,'alpha':0.3, 'gamma': 1.01}
+
 if st.button('Find Optimal Values'):
     optimal_values=True
     for i in media:
-        optimal_params, corr = measure_delayed_effect(data, output, i)
         optimal_dim,corr_dim=measure_dim_effect(data, output, i)
+        optimal_params, corr = measure_delayed_effect(data, output, i)
         lagged[i]={'shape':optimal_params[0],'scale':optimal_params[1],
         'alpha':optimal_dim[0], 'gamma': optimal_dim[1]}
         correlations[i]={'correlation_adstock':abs(corr),'correlation_dim':abs(corr_dim)}
+        st.session_state['lagged']=lagged
 
-        
-else:
+            
+"""else:
     for i in media:
         lagged[i]={'shape':0.1,'scale':0.1,'alpha':0.3, 'gamma': 1.01}
-        column_values={}
+        column_values={}"""
 
+
+lagged=st.session_state['lagged']
 
 
 start_date = st.date_input(label='Start Date', value=data[date].min())
