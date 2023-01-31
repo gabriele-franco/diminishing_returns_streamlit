@@ -4,6 +4,8 @@ from func import create_number_list, saturation_hill, adstock,get_average_last_1
 from func import measure_delayed_effect,measure_dim_effect
 import matplotlib.pyplot as plt
 
+st.markdown("# Step1 ❄️")
+st.sidebar.markdown("# Step1 ❄️")
 
 
 #Save all the variable in the session_state
@@ -26,6 +28,13 @@ correlations={}
 for i in media:
     lagged[i]={'shape':0.1,'scale':0.1,'alpha':0.3, 'gamma': 1.01}
 
+
+
+            
+"""else:
+    for i in media:
+        lagged[i]={'shape':0.1,'scale':0.1,'alpha':0.3, 'gamma': 1.01}
+        column_values={}"""
 if st.button('Find Optimal Values'):
     optimal_values=True
     for i in media:
@@ -35,15 +44,8 @@ if st.button('Find Optimal Values'):
         'alpha':optimal_dim[0], 'gamma': optimal_dim[1]}
         correlations[i]={'correlation_adstock':abs(corr),'correlation_dim':abs(corr_dim)}
         st.session_state['lagged']=lagged
-
-            
-"""else:
-    for i in media:
-        lagged[i]={'shape':0.1,'scale':0.1,'alpha':0.3, 'gamma': 1.01}
-        column_values={}"""
-
-
 lagged=st.session_state['lagged']
+
 
 
 start_date = st.date_input(label='Start Date', value=data[date].min())
@@ -71,6 +73,9 @@ spent=get_average_last_15_days(data, media)
 
 # Create a new section in the sidebar
 ad=st.selectbox("Select the media", media)
+
+
+
 st.subheader(f"{ad} Graph")
 df=create_number_list(data, ad)
 df['dim'] = saturation_hill(df['spent'], column_values[ad]['alpha'], column_values[ad]['gamma'])

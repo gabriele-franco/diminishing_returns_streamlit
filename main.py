@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import csv
 
 st.set_page_config(
     page_title="Cassandra MMM App",
@@ -19,9 +20,11 @@ if "data" not in st.session_state:
     st.session_state["media"]=""
     st.session_state["organic"]=""
 
-data = st.file_uploader("Choose a CSV file", type=["csv"])
-if data is not None:
-    data = pd.read_csv(data)
+datas = st.file_uploader("Choose a CSV file", type=["csv"])
+
+
+if datas is not None:
+    data = pd.read_csv(datas)
     st.dataframe(data)
     media_auto = [col for col in data.columns if 'spend' in col]
     #output_auto= [col for col in data.columns if 'revenue' in col]
@@ -37,4 +40,5 @@ if data is not None:
         st.session_state["date"]=date
         st.session_state["media"]=media
         st.session_state["organic"]=organic
+        data.to_csv('dataset.csv')
 

@@ -214,7 +214,7 @@ def measure_delayed_effect(df, output, column_b):
         return -corr
 
     bnds = [(0.1, 10), (0.01, 0.5)]
-    x0 = [1, 0.1]
+    x0 = [3, 0.24]
     res = minimize(adstock_correlation, x0=x0, bounds=bnds, args=(df, output, column_b), method='Nelder-Mead')
     optimal_params = res.x
     corr=adstock_correlation(optimal_params, df, output, column_b)

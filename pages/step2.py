@@ -14,3 +14,6 @@ variance=st.session_state['variance']
 
 init=generate_robyn_inputs(date, output, media, organic, start_date, end_date, iterations,column_values, variance )
 st.code(init)
+
+with open("Robyn.R", "w") as f:
+    f.write(init)
