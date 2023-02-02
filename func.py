@@ -233,3 +233,32 @@ def measure_dim_effect(df, output, column_b):
     optimal_params = res.x
     corr=dim_correlation(optimal_params, df, output, column_b)
     return optimal_params,corr
+
+def robyn_cpo(json):
+    cpo={}
+    spend={}
+    for i in json['ExportedModel']['summary']:
+        if 'spend' in i['variable']:
+            var=i['variable']
+            spent=i['mean_spend']
+            response=i['mean_response']
+            spend[var]={'mean_spend': spent}
+            if response == 0:
+                cpo[var]={'cpo':0}
+            else:
+                cpo[var]={'cpo':spent/(response+1)}
+        else:
+            continue
+    return cpo, spend
+
+def get_robyn_hyper(json, media):
+    hyper=json['ExportedModel']['hyper_values']
+    st.code(json['ExportedModel']['hyper_values'])
+    alphas={}
+    gammas={}
+    for i in media:
+        alpha_key = f"{i}_alphas"
+        gamma_key = f"{i}_gammas"
+        alphas[i]=hyper[alpha_key][0]
+        gammas[i]=hyper[gamma_key][0]
+    return alphas, gammas

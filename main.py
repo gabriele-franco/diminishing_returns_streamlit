@@ -26,6 +26,10 @@ datas = st.file_uploader("Choose a CSV file", type=["csv"])
 if datas is not None:
     data = pd.read_csv(datas)
     st.dataframe(data)
+    if data.isnull().values.any():
+        st.write("DataFrame contains NA values")
+    else:
+        st.write("DataFrame does not contain NA values")
     media_auto = [col for col in data.columns if 'spend' in col]
     #output_auto= [col for col in data.columns if 'revenue' in col]
     #date_auto=[col for col in data.columns if 'date' in col]
