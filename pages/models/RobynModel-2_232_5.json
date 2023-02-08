@@ -1,0 +1,223 @@
+{
+  "InputCollect": {
+    "date_var": ["DATE"],
+    "dayInterval": [7],
+    "intervalType": ["week"],
+    "dep_var": ["revenue"],
+    "dep_var_type": ["revenue"],
+    "prophet_vars": ["trend", "season", "holiday"],
+    "prophet_signs": ["default", "default", "default"],
+    "prophet_country": ["DE"],
+    "context_vars": ["competitor_sales_B", "events"],
+    "context_signs": ["default", "default"],
+    "paid_media_vars": ["tv_S", "ooh_S", "print_S", "facebook_I", "search_clicks_P"],
+    "paid_media_signs": ["positive", "positive", "positive", "positive", "positive"],
+    "paid_media_spends": ["tv_S", "ooh_S", "print_S", "facebook_S", "search_S"],
+    "mediaVarCount": [5],
+    "exposure_vars": ["facebook_I", "search_clicks_P"],
+    "organic_vars": ["newsletter"],
+    "organic_signs": ["positive"],
+    "all_media": ["tv_S", "ooh_S", "print_S", "facebook_S", "search_S", "newsletter"],
+    "all_ind_vars": ["trend", "season", "holiday", "competitor_sales_B", "events", "tv_S", "ooh_S", "print_S", "facebook_S", "search_S", "newsletter"],
+    "factor_vars": ["events"],
+    "unused_vars": [],
+    "window_start": ["2016-01-04"],
+    "rollingWindowStartWhich": [7],
+    "window_end": ["2018-12-31"],
+    "rollingWindowEndWhich": [163],
+    "rollingWindowLength": [157],
+    "refreshAddedStart": ["2016-01-04"],
+    "adstock": ["geometric"],
+    "hyperparameters": {
+      "facebook_S_alphas": [0.5, 3],
+      "facebook_S_gammas": [0.3, 1],
+      "facebook_S_thetas": [0, 0.3],
+      "print_S_alphas": [0.5, 3],
+      "print_S_gammas": [0.3, 1],
+      "print_S_thetas": [0.1, 0.4],
+      "tv_S_alphas": [0.5, 3],
+      "tv_S_gammas": [0.3, 1],
+      "tv_S_thetas": [0.3, 0.8],
+      "search_S_alphas": [0.5, 3],
+      "search_S_gammas": [0.3, 1],
+      "search_S_thetas": [0, 0.3],
+      "ooh_S_alphas": [0.5, 3],
+      "ooh_S_gammas": [0.3, 1],
+      "ooh_S_thetas": [0.1, 0.4],
+      "newsletter_alphas": [0.5, 3],
+      "newsletter_gammas": [0.3, 1],
+      "newsletter_thetas": [0.1, 0.4]
+    },
+    "calibration_input": {},
+    "custom_params": [],
+    "version": ["Robyn (dev) v3.8.2 [R-4.1.1]"]
+  },
+  "ExportedModel": {
+    "select_model": ["2_232_5"],
+    "summary": [
+      {
+        "variable": "(Intercept)",
+        "coef": 0,
+        "decompPer": 0,
+        "decompAgg": 0
+      },
+      {
+        "variable": "trend",
+        "coef": 0.3108,
+        "decompPer": 0.301,
+        "decompAgg": 86962189.6597
+      },
+      {
+        "variable": "season",
+        "coef": 0.3007,
+        "decompPer": 0.0004,
+        "decompAgg": 110084.7162
+      },
+      {
+        "variable": "holiday",
+        "coef": 1.0155,
+        "decompPer": 0.0245,
+        "decompAgg": 7067186.1867
+      },
+      {
+        "variable": "competitor_sales_B",
+        "coef": 0.1959,
+        "decompPer": 0.5908,
+        "decompAgg": 170694592.8008
+      },
+      {
+        "variable": "events",
+        "coef": 1.0023,
+        "decompPer": 0.0044,
+        "decompAgg": 1275717.9417
+      },
+      {
+        "variable": "tv_S",
+        "coef": 380800.385,
+        "decompPer": 0.0243,
+        "decompAgg": 7035262.0138,
+        "performance": 0.362,
+        "mean_response": 77492.8461,
+        "mean_spend": 290083.4493,
+        "boot_mean": 0.4263,
+        "ci_low": 0.3012,
+        "ci_up": 0.5505
+      },
+      {
+        "variable": "ooh_S",
+        "coef": 199502.7014,
+        "decompPer": 0.019,
+        "decompAgg": 5499624.1613,
+        "performance": 0.356,
+        "mean_response": 52099.8429,
+        "mean_spend": 230588.4478,
+        "boot_mean": 0.3769,
+        "ci_low": 0.3015,
+        "ci_up": 0.4524
+      },
+      {
+        "variable": "print_S",
+        "coef": 325244.3209,
+        "decompPer": 0.0108,
+        "decompAgg": 3108095.6966,
+        "performance": 0.6888,
+        "mean_response": 24753.4346,
+        "mean_spend": 70504.099,
+        "boot_mean": 0.6561,
+        "ci_low": 0.578,
+        "ci_up": 0.7346
+      },
+      {
+        "variable": "facebook_S",
+        "coef": 39508.3594,
+        "decompPer": 0.0051,
+        "decompAgg": 1460794.5257,
+        "performance": 0.1458,
+        "mean_response": 19328.4799,
+        "mean_spend": 128491.5469,
+        "boot_mean": 0.2019,
+        "ci_low": 0.0649,
+        "ci_up": 0.338
+      },
+      {
+        "variable": "search_S",
+        "coef": 55630.3977,
+        "decompPer": 0.0075,
+        "decompAgg": 2174269.803,
+        "performance": 0.3579,
+        "mean_response": 13326.299,
+        "mean_spend": 45674.4361,
+        "boot_mean": 0.3647,
+        "ci_low": 0.2435,
+        "ci_up": 0.4851
+      },
+      {
+        "variable": "newsletter",
+        "coef": 131985.9096,
+        "decompPer": 0.0122,
+        "decompAgg": 3538489.8646
+      }
+    ],
+    "errors": [
+      {
+        "rsq_train": 0.9488,
+        "nrmse": 0.0505,
+        "decomp.rssd": 0.1329,
+        "mape": 0
+      }
+    ],
+    "hyper_values": {
+      "facebook_S_alphas": [1.9796],
+      "facebook_S_gammas": [0.3114],
+      "facebook_S_thetas": [0.1361],
+      "lambda": [47378.374],
+      "newsletter_alphas": [2.582],
+      "newsletter_gammas": [0.5405],
+      "newsletter_thetas": [0.2538],
+      "ooh_S_alphas": [0.883],
+      "ooh_S_gammas": [0.7771],
+      "ooh_S_thetas": [0.399],
+      "print_S_alphas": [2.8367],
+      "print_S_gammas": [0.8092],
+      "print_S_thetas": [0.2725],
+      "search_S_alphas": [2.5203],
+      "search_S_gammas": [0.4939],
+      "search_S_thetas": [0.13],
+      "tv_S_alphas": [1.9251],
+      "tv_S_gammas": [0.4954],
+      "tv_S_thetas": [0.314]
+    },
+    "hyper_updated": {
+      "facebook_S_alphas": [0.5, 3],
+      "facebook_S_gammas": [0.3, 1],
+      "facebook_S_thetas": [0, 0.3],
+      "newsletter_alphas": [0.5, 3],
+      "newsletter_gammas": [0.3, 1],
+      "newsletter_thetas": [0.1, 0.4],
+      "ooh_S_alphas": [0.5, 3],
+      "ooh_S_gammas": [0.3, 1],
+      "ooh_S_thetas": [0.1, 0.4],
+      "print_S_alphas": [0.5, 3],
+      "print_S_gammas": [0.3, 1],
+      "print_S_thetas": [0.1, 0.4],
+      "search_S_alphas": [0.5, 3],
+      "search_S_gammas": [0.3, 1],
+      "search_S_thetas": [0, 0.3],
+      "tv_S_alphas": [0.5, 3],
+      "tv_S_gammas": [0.3, 1],
+      "tv_S_thetas": [0.3, 0.8],
+      "lambda": [0, 1]
+    },
+    "calibration_constraint": [0.1],
+    "cores": [7],
+    "iterations": [2000],
+    "trials": [5],
+    "intercept_sign": ["non_negative"],
+    "nevergrad_algo": ["TwoPointsDE"],
+    "add_penalty_factor": [false],
+    "seed": [123],
+    "pareto_fronts": [2],
+    "hyper_fixed": [false],
+    "plot_folder": ["/Users/cristian/Desktop/cassandra-workspace/Robyn_202302021125_init/"]
+  }
+}
